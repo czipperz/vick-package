@@ -26,10 +26,6 @@ int main(int argc, char** argv)
         } catch(int i) {
             return i;
         }
-        cout << "Successfully updated ";
-        if (argc == 2) cout << "all packages";
-        else print_args(argc-2, argv+2);
-        cout << ".  Exiting" << endl;
     } else if (not strcmp(argv[1], "install") or not strcmp(argv[1], "i")) {
         if (argc < 3) {
             cout << "Need at least three arguments when not updating." << endl;
@@ -41,9 +37,6 @@ int main(int argc, char** argv)
         } catch(int i) {
             return i;
         }
-        cout << "Successfully installed ";
-        print_args(argc-2, argv+2);
-        cout << ".  Exiting" << endl;
     } else if (not strcmp(argv[1], "remove") or not strcmp(argv[1], "r")) {
         if (argc < 3) {
             cout << "Need at least three arguments when not updating." << endl;
@@ -55,9 +48,6 @@ int main(int argc, char** argv)
         } catch(int i) {
             return i;
         }
-        cout << "Successfully removed ";
-        print_args(argc-2, argv+2);
-        cout << ".  Exiting" << endl;
     } else {
         cout << "Invalid command \"" << argv[1] << "\"." << endl
              << "Use update, install, or remove instead." << endl;

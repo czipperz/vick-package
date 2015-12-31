@@ -11,6 +11,7 @@ static void calculate_dependency(
     vector<pair<string, bool> >& pac,
     const map<string, pair<string, vector<string> > >& pacstash)
 {
+    if (p.empty()) return;
     auto itr = pacstash.find(p);
     if (itr == pacstash.end()) {
         cout << "Package not recognized: " << p << endl;

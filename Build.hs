@@ -81,6 +81,6 @@ dropDirectory = fun drop
 dropAllButDirectory = fun dropAllBut
 takeDirectory = fun take
 takeAllButDirectory = fun takeAllBut
-fun :: Foldable f => (t -> [String] -> f String) -> t -> String -> String
+fun :: (t -> [String] -> [String]) -> t -> String -> String
 fun f n s = let res = f n (split '/' s) in
   if null res then "" else foldr1 (\l r -> l ++ '/' : r) res

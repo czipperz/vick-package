@@ -14,6 +14,7 @@ int main(int argc, char** argv)
 
     /* make args not worry about program name */
     argc--; argv++;
+    create_directory("plugins");
 
     if (argc < 2) {
         cout << "Need at least two arguments." << endl;

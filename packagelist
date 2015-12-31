@@ -1,0 +1,12 @@
+# name                          url                                                             dependencies
+vick-compile                    https://github.com/czipperz/vick-compile                        vick-shell-command
+vick-find                       https://github.com/czipperz/vick-find
+vick-insert-mode                https://github.com/czipperz/vick-insert-mode                    vick-move
+vick-join                       https://github.com/czipperz/vick-join
+vick-linear-change-manager      https://github.com/czipperz/vick-linear-change-manager
+vick-makefile                   https://github.com/czipperz/vick-makefile
+vick-move                       https://github.com/czipperz/vick-move
+vick-open-line                  https://github.com/czipperz/vick-open-line                      vick-insert-mode
+vick-page                       https://github.com/czipperz/vick-page
+vick-plugin-base                https://github.com/czipperz/vick-plugin-base
+vick-shell-command              https://github.com/czipperz/vick-shell-command

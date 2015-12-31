@@ -1,0 +1,7 @@
+# shake
+.shake
+make
+
+# binary
+out
+vick-package

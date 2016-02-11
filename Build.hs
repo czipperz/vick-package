@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 import Development.Shake
 import Development.Shake.Command
 import Development.Shake.FilePath
@@ -10,8 +12,8 @@ srcout = "out"
 testout = "testout"
 binary = "vick-package"
 
-cxx, cflags, ldflags :: String
-cxx = "clang++"
+cflags, ldflags :: String
+#define cxx "clang++"
 cflags = "-std=c++11 -g " ++
          "-Wold-style-cast -Wnon-virtual-dtor -Wnarrowing " ++
          "-Wdelete-non-virtual-dtor -Wctor-dtor-privacy " ++

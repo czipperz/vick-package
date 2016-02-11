@@ -13,7 +13,9 @@ testout = "testout"
 binary = "vick-package"
 
 cflags, ldflags :: String
+#ifndef cxx
 #define cxx "clang++"
+#endif
 cflags = "-std=c++11 -g " ++
          "-Wold-style-cast -Wnon-virtual-dtor -Wnarrowing " ++
          "-Wdelete-non-virtual-dtor -Wctor-dtor-privacy " ++

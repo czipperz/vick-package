@@ -20,5 +20,5 @@ before_script:
 
 script:
   - mkdir -p .shake
-  - ghc --make Build.hs -rtsopts -with-rtsopts=-I0 -outputdir=.shake -Dcxx=g++ -o make
+  - ghc --make Build.hs -rtsopts -with-rtsopts=-I0 -outputdir=.shake -Dcxx='"g++"' -o make
   - ./make

@@ -36,7 +36,7 @@ void update_packages(int num_packages, char** packages)
                 cout << "Directory you specified to update (" << *packages
                      << ") does not exist." << endl
                      << "It did when we safety checked!" << endl;
-                throw 8;
+                throw 9;
             }
             fun(p);
         }

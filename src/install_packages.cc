@@ -16,7 +16,7 @@ static void calculate_dependency(
     auto itr = pacstash.find(p);
     if (itr == pacstash.end()) {
         cout << "Package not recognized: " << p << endl;
-        throw 11;
+        throw 13;
     }
     for (auto& a : itr->second.second) {
         if (find_if(begin(pac), end(pac), [&a](pair<string, bool>& p) {
@@ -75,7 +75,7 @@ void install_packages(int num_packages, const char* const* packages) {
 
     if (shouldthrow) {
         cout << "Some packages aren't registered so won't install any specified" << endl;
-        throw 10;
+        throw 12;
     }
 
     vector<pair<string, bool> > pac;

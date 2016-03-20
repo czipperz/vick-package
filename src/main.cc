@@ -42,7 +42,7 @@ int main(int argc, char** argv)
         if (argc < 3) {
             cout << "Need at least three arguments when not updating." << endl;
             cout << "Hint: give some packages to remove" << endl;
-            return 7;
+            return 14;
         }
         try {
             remove_packages(argc-2, argv+2);

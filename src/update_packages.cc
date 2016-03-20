@@ -21,19 +21,19 @@ void update_packages(int num_packages, char** packages)
         for (; n; --n, ++p) {
             auto path = cur / *p;
             if (not exists(path)) {
-                cout << "Package you specified to update (" << *p
+                cerr << "Package you specified to update (" << *p
                      << ") does not exist." << endl;
                 shouldthrow = true;
             }
         }
         if (shouldthrow) {
-            cout << "Some packages don't exist so won't update any specified." << endl;
+            cerr << "Some packages don't exist so won't update any specified." << endl;
             throw 8;
         }
         for (; num_packages; --num_packages, ++packages) {
             path p = cur / *packages;
             if (not exists(p)) {
-                cout << "Directory you specified to update (" << *packages
+                cerr << "Directory you specified to update (" << *packages
                      << ") does not exist." << endl
                      << "It did when we safety checked!" << endl;
                 throw 9;

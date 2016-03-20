@@ -17,7 +17,7 @@ int main(int argc, char** argv)
     create_directory("plugins");
 
     if (argc < 2) {
-        cout << "Need at least two arguments." << endl;
+        cerr << "Need at least two arguments." << endl;
         print_usage(argv[-1]);
         return 5;
     }
@@ -29,8 +29,8 @@ int main(int argc, char** argv)
         }
     } else if (not strcmp(argv[1], "install") or not strcmp(argv[1], "i")) {
         if (argc < 3) {
-            cout << "Need at least three arguments when not updating." << endl;
-            cout << "Hint: give some packages to install" << endl;
+            cerr << "Need at least three arguments when not updating." << endl
+                 << "Hint: give some packages to install" << endl;
             return 7;
         }
         try {
@@ -40,8 +40,8 @@ int main(int argc, char** argv)
         }
     } else if (not strcmp(argv[1], "remove") or not strcmp(argv[1], "r")) {
         if (argc < 3) {
-            cout << "Need at least three arguments when not updating." << endl;
-            cout << "Hint: give some packages to remove" << endl;
+            cerr << "Need at least three arguments when not updating." << endl
+                 << "Hint: give some packages to remove" << endl;
             return 14;
         }
         try {
@@ -50,7 +50,7 @@ int main(int argc, char** argv)
             return i;
         }
     } else {
-        cout << "Invalid command \"" << argv[1] << "\"." << endl
+        cerr << "Invalid command \"" << argv[1] << "\"." << endl
              << "Use update, install, or remove instead." << endl;
         return 6;
     }

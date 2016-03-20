@@ -15,7 +15,7 @@ static void calculate_dependency(
     if (p.empty()) return;
     auto itr = pacstash.find(p);
     if (itr == pacstash.end()) {
-        cout << "Package not recognized: " << p << endl;
+        cerr << "Package not recognized: " << p << endl;
         throw 13;
     }
     for (auto& a : itr->second.second) {
@@ -47,7 +47,7 @@ void install_packages(int num_packages, const char* const* packages) {
     }
     if (not is_regular_file(package_list)) {
     filesystemerr:
-        cout << "First argument (" << packages[-2] << ") is not a valid file" << endl;
+        cerr << "First argument (" << packages[-2] << ") is not a valid file" << endl;
         throw 4;
     }
 
@@ -61,12 +61,12 @@ void install_packages(int num_packages, const char* const* packages) {
     for (; n; --n, ++p) {
         path comb = cur / *p;
         if (exists(comb)) {
-            cout << "Warning: Package you specified to install (" << *p
+            cerr << "Warning: Package you specified to install (" << *p
                  << ") is already installed." << endl
                  << "  Will remove and reinstall!" << endl;
         }
         if (pacstash.find(*p) == pacstash.end()) {
-            cout << "Package you specified to install (" << *p
+            cerr << "Package you specified to install (" << *p
                  << ") is not a key in the package list you gave (" << packages[-2]
                  << ")." << endl;
             shouldthrow = true;
@@ -74,7 +74,7 @@ void install_packages(int num_packages, const char* const* packages) {
     }
 
     if (shouldthrow) {
-        cout << "Some packages aren't registered so won't install any specified" << endl;
+        cerr << "Some packages aren't registered so won't install any specified" << endl;
         throw 12;
     }
 

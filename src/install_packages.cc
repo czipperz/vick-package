@@ -61,7 +61,7 @@ void install_packages(int num_packages, const char* const* packages) {
     const path cur = current_path() / "plugins";
     auto n = num_packages;
     auto p = packages;
-    auto shouldthrow = false;
+    auto should_throw = false;
     for (; n; --n, ++p) {
         path comb = cur / *p;
         if (exists(comb)) {
@@ -73,11 +73,11 @@ void install_packages(int num_packages, const char* const* packages) {
             cerr << "Package you specified to install (" << *p
                  << ") is not a key in the package list you gave (" << packages[-2]
                  << ")." << endl;
-            shouldthrow = true;
+            should_throw = true;
         }
     }
 
-    if (shouldthrow) {
+    if (should_throw) {
         cerr << "Some packages aren't registered so won't install any specified" << endl;
         throw 12;
     }

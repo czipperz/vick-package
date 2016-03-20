@@ -3,6 +3,7 @@
 #include <iostream>
 #include <map>
 
+#include "color.hh"
 #include "install_packages.hh"
 #include "parse_packages.hh"
 
@@ -15,7 +16,8 @@ static void calculate_dependency(
     if (p.empty()) return;
     auto itr = pacstash.find(p);
     if (itr == pacstash.end()) {
-        cerr << "Package not recognized: " << p << endl;
+        cerr << RED("Error:")
+             << " Package not recognized: " << p << endl;
         throw 13;
     }
     for (auto& a : itr->second.second) {
@@ -65,20 +67,22 @@ void install_packages(int num_packages, const char* const* packages) {
     for (; n; --n, ++p) {
         path comb = cur / *p;
         if (exists(comb)) {
-            cerr << "Warning: Package you specified to install (" << *p
+            cerr << BOLD("Warning:")
+                 << " Package you specified to install (" << *p
                  << ") is already installed." << endl
                  << "  Will remove and reinstall!" << endl;
         }
         if (pacstash.find(*p) == pacstash.end()) {
-            cerr << "Package you specified to install (" << *p
-                 << ") is not a key in the package list you gave (" << packages[-2]
-                 << ")." << endl;
+            cerr << RED("Error:")
+                 << " Package you specified to install (" << *p
+                 << ") is not a key in the package list you gave ("
+                 << packages[-2] << ")." << endl;
             should_throw = true;
         }
     }
 
     if (should_throw) {
-        cerr << "Some packages aren't registered so won't install any specified" << endl;
+        cerr << RED("Error:") << " Some packages aren't registered so won't install any specified" << endl;
         throw 12;
     }
 
@@ -90,11 +94,11 @@ void install_packages(int num_packages, const char* const* packages) {
     calculate_dependencies(pac, pacstash);
     sort(begin(pac), end(pac));
 
-    cout << "Packages to install (" << pac.size() << "):";
+    cout << BOLD("Packages to install (" << pac.size() << "):");
     for (auto& s : pac) {
         cout << "  " << s.first;
     }
-    cout << endl << "Continue with installation? [Y,n] ";
+    cout << endl << BOLD("Continue with installation? [Y,n] ");
 
     char c = getchar();
     if (not (c == 'Y' or c == 'y' or c == '\n')) {
@@ -110,13 +114,13 @@ void install_packages(int num_packages, const char* const* packages) {
                 remove_all(p);
             } else {
                 chdir(p.c_str());
-                cout << itr->first << ':' << endl;
+                cout << BOLD(itr->first) << ':' << endl;
                 system("git pull");
                 cout << endl;
                 continue;
             }
         }
-        cout << itr->first << ':' << endl;
+        cout << BOLD(itr->first) << ':' << endl;
         auto str = string("git clone '") + itr->second.first + "' '" +
                    itr->first + "'";
         int i = system(str.c_str());

@@ -1,11 +1,12 @@
 #include <iostream>
 
+#include "color.hh"
 #include "print_helper.hh"
 
 void print_usage(const char* program_name)
 {
     using namespace std;
-    cerr << "Usage:" << endl
+    cerr << BOLD("Usage:") << endl
          << "  " << program_name
          << " <packagelist> <command> <packages>" << endl
          << "  <packagelist> is a file that has a list of package, "

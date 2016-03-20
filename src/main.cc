@@ -6,6 +6,7 @@
 #include "update_packages.hh"
 #include "remove_packages.hh"
 #include "install_packages.hh"
+#include "search_packages.hh"
 #include "print_helper.hh"
 
 int main(int argc, char** argv)
@@ -53,6 +54,20 @@ int main(int argc, char** argv)
         try {
             remove_packages(argc-2, argv+2);
         } catch(int i) {
+            return i;
+        }
+    } else if (strcmp(argv[1], "search") == 0 or strcmp(argv[1], "s") == 0) {
+        if (argc > 3) {
+            cerr << RED("Error:")
+                 << " Need at most three arguments when searching."
+                 << endl
+                 << BOLD("Hint:") << " give a search query (or leave it blank)"
+                 << endl;
+            return 15;
+        }
+        try {
+            search_packages(argc - 2, argv + 2);
+        } catch (int i) {
             return i;
         }
     } else {

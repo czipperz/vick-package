@@ -1,5 +1,6 @@
-#include "print_helper.hh"
 #include <iostream>
+
+#include "print_helper.hh"
 
 void print_usage(const char* program_name)
 {

@@ -15,7 +15,8 @@ int main(int argc, char** argv)
     using namespace boost::filesystem;
 
     /* make args not worry about program name */
-    argc--; argv++;
+    argc--;
+    argv++;
     create_directory("plugins");
 
     if (argc < 2) {
@@ -23,13 +24,13 @@ int main(int argc, char** argv)
         print_usage(argv[-1]);
         return 5;
     }
-    if (not strcmp(argv[1], "update") or not strcmp(argv[1], "u")) {
+    if (strcmp(argv[1], "update") == 0 or strcmp(argv[1], "u") == 0) {
         try {
-            update_packages(argc-2, argv+2);
-        } catch(int i) {
+            update_packages(argc - 2, argv + 2);
+        } catch (int i) {
             return i;
         }
-    } else if (not strcmp(argv[1], "install") or not strcmp(argv[1], "i")) {
+    } else if (strcmp(argv[1], "install") == 0 or strcmp(argv[1], "i") == 0) {
         if (argc < 3) {
             cerr << RED("Error:") << " Need at least three arguments "
                                      "when not updating."
@@ -39,11 +40,11 @@ int main(int argc, char** argv)
             return 7;
         }
         try {
-            install_packages(argc-2, argv+2);
-        } catch(int i) {
+            install_packages(argc - 2, argv + 2);
+        } catch (int i) {
             return i;
         }
-    } else if (not strcmp(argv[1], "remove") or not strcmp(argv[1], "r")) {
+    } else if (strcmp(argv[1], "remove") == 0 or strcmp(argv[1], "r") == 0) {
         if (argc < 3) {
             cerr << RED("Error:") << " Need at least three arguments "
                                      "when not updating."
@@ -52,8 +53,8 @@ int main(int argc, char** argv)
             return 14;
         }
         try {
-            remove_packages(argc-2, argv+2);
-        } catch(int i) {
+            remove_packages(argc - 2, argv + 2);
+        } catch (int i) {
             return i;
         }
     } else if (strcmp(argv[1], "search") == 0 or strcmp(argv[1], "s") == 0) {

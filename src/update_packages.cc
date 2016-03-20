@@ -8,7 +8,7 @@ void update_packages(int num_packages, char** packages)
     using namespace boost::filesystem;
     using namespace std;
     const path cur = current_path() / "plugins";
-    auto fun = [](path p) {
+    const auto fun = [](path p) {
         cout << BOLD(p.filename().c_str() << ": ") << flush;
         chdir(p.c_str());
 

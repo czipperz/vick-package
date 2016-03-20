@@ -39,20 +39,24 @@ static void calculate_dependencies(
 void install_packages(int num_packages, const char* const* packages) {
     using namespace boost::filesystem;
 
-    path package_list;
-    try {
-        package_list = packages[-2];
-    } catch (filesystem_error&) {
-        goto filesystemerr;
-    }
-    if (not is_regular_file(package_list)) {
-    filesystemerr:
-        cerr << "First argument (" << packages[-2] << ") is not a valid file" << endl;
-        throw 4;
+    // ensure valid path to packages
+    {
+        path p;
+        try {
+            p = packages[-2];
+        } catch (filesystem_error&) {
+            goto filesystemerr;
+        }
+        if (not is_regular_file(p)) {
+        filesystemerr:
+            cerr << RED("Error:") << " First argument ("
+                 << packages[-2] << ") is not a valid file" << endl;
+            throw 4;
+        }
     }
 
     map<string, pair<string, vector<string> > > pacstash =
-        parse_packages(package_list.c_str());
+        parse_packages(packages[-2]);
 
     const path cur = current_path() / "plugins";
     auto n = num_packages;

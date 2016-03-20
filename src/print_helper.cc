@@ -19,33 +19,3 @@ void print_usage(const char* program_name)
             "updates all the packages."
          << endl;
 }
-
-template<class T>
-static void printargs(int argc, T&& argv)
-{
-    using namespace std;
-    switch (argc) {
-        case 0:
-            return;
-        case 1:
-            cout << argv[0];
-            return;
-        case 2:
-            cout << argv[0] << " and " << argv[1];
-            return;
-        default:
-            for (int i = 0; i != argc - 1; ++i) {
-                cout << argv[i] << ", ";
-            }
-            cout << "and " << argv[argc - 1];
-            return;
-    }
-}
-
-void print_args(const std::vector<std::string>& argv) {
-    printargs(argv.size(), argv);
-}
-
-void print_args(int argc, const char* const* argv) {
-    printargs(argc, argv);
-}

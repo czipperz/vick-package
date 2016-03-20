@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "parse_packages.hh"
-#include "print_helper.hh"
 
 static std::vector<std::string> words_in_line(const std::string& line)
 {

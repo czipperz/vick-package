@@ -16,8 +16,11 @@ void print_usage(const char* program_name)
          << "  <packagelist> is a file that has a list of package, "
             "url pairs."
          << endl
-         << "  <command> is update, install, or remove." << endl
-         << "    - Abreviations of u, i, and r, respectively, can be "
+         << "  <command> is update, install, remove, search, or new "
+            "or init."
+         << endl
+         << "    - Abreviations of u, i, r, and s, respectively, can "
+            "be "
             "used."
          << endl
          << "  <packages> are the packages you want to <command>."

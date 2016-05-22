@@ -23,7 +23,7 @@ void remove_packages(int num_packages, const char* const* packages) {
     }
     if (shouldthrow) {
         cout << "Some packages don't exist so won't remove any specified." << endl;
-        throw 10;
+        exit(EXIT_FAILURE);
     }
     for (; num_packages; --num_packages, ++packages) {
         path p = cur / *packages;
@@ -31,7 +31,7 @@ void remove_packages(int num_packages, const char* const* packages) {
             cout << "Directory you specified to remove (" << *packages
                  << ") does not exist." << endl
                  << "It did when we safety checked!" << endl;
-            throw 11;
+            exit(EXIT_FAILURE);
         }
         /* ensure not unistd.h's remove */
         boost::filesystem::remove_all(p);

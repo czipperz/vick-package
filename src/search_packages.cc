@@ -25,7 +25,7 @@ void search_packages(int argc, const char* const* arguments)
         filesystemerr:
             cerr << RED("Error:") << "First argument ("
                  << arguments[-2] << ") is not a valid file" << endl;
-            throw 16;
+            exit(EXIT_FAILURE);
         }
     }
 

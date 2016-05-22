@@ -37,7 +37,7 @@ void update_packages(int num_packages, char** packages)
             cerr << RED("Error:") << " Some packages don't exist so "
                                      "won't update any specified."
                  << endl;
-            throw 8;
+            exit(EXIT_FAILURE);
         }
         for (; num_packages; --num_packages, ++packages) {
             path p = cur / *packages;
@@ -46,7 +46,7 @@ void update_packages(int num_packages, char** packages)
                      << " Directory you specified to update ("
                      << *packages << ") does not exist." << endl
                      << "It did when we safety checked!" << endl;
-                throw 9;
+                exit(EXIT_FAILURE);
             }
             fun(p);
         }

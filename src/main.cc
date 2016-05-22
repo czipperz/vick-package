@@ -27,14 +27,10 @@ int main(int argc, char** argv) {
         cerr << RED("Error:") << " Need at least two arguments."
              << endl;
         print_usage(argv[-1]);
-        return 5;
+        return EXIT_FAILURE;
     }
     if (strcmp(argv[1], "update") == 0 or strcmp(argv[1], "u") == 0) {
-        try {
-            update_packages(argc - 2, argv + 2);
-        } catch (int i) {
-            return i;
-        }
+        update_packages(argc - 2, argv + 2);
     } else if (strcmp(argv[1], "install") == 0 or
                strcmp(argv[1], "i") == 0) {
         if (argc < 3) {
@@ -43,13 +39,9 @@ int main(int argc, char** argv) {
                  << endl
                  << BOLD("Hint:") << " give some packages to install"
                  << endl;
-            return 7;
+            return EXIT_FAILURE;
         }
-        try {
-            install_packages(argc - 2, argv + 2);
-        } catch (int i) {
-            return i;
-        }
+        install_packages(argc - 2, argv + 2);
     } else if (strcmp(argv[1], "remove") == 0 or
                strcmp(argv[1], "r") == 0) {
         if (argc < 3) {
@@ -60,11 +52,7 @@ int main(int argc, char** argv) {
                  << endl;
             return 14;
         }
-        try {
-            remove_packages(argc - 2, argv + 2);
-        } catch (int i) {
-            return i;
-        }
+        remove_packages(argc - 2, argv + 2);
     } else if (strcmp(argv[1], "search") == 0 or
                strcmp(argv[1], "s") == 0) {
         if (argc > 3) {
@@ -74,13 +62,9 @@ int main(int argc, char** argv) {
                  << BOLD("Hint:")
                  << " give a search query (or leave it blank)"
                  << endl;
-            return 15;
+            return EXIT_FAILURE;
         }
-        try {
-            search_packages(argc - 2, argv + 2);
-        } catch (int i) {
-            return i;
-        }
+        search_packages(argc - 2, argv + 2);
     } else if (strcmp(argv[1], "new") == 0 or
                strcmp(argv[1], "create") == 0) {
         if (argc > 3) {
@@ -89,16 +73,12 @@ int main(int argc, char** argv) {
                  << endl;
             return 16;
         }
-        try {
-            create_package(argc - 2, argv + 2);
-        } catch (int i) {
-            return i;
-        }
+        create_package(argc - 2, argv + 2);
     } else {
         cerr << RED("Error:") << " Invalid command \"" << argv[1]
              << "\"." << endl
              << BOLD("Hint:")
              << " Use update, install, or remove instead." << endl;
-        return 6;
+        return EXIT_FAILURE;
     }
 }

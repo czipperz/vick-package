@@ -41,7 +41,7 @@ parse_packages(std::string filename)
     ifstream file(filename);
     if (not file) {
         cout << "File does not exist: " << filename << endl;
-        throw 1;
+        exit(EXIT_FAILURE);
     }
 
     for (size_t linenum = 1; file; linenum++) {
@@ -53,7 +53,7 @@ parse_packages(std::string filename)
         if (words.size() < 2) {
             cout << "Parse error: Less than 2 arguments on line " << linenum
                  << " of " << filename << "." << endl;
-            throw 2;
+            exit(EXIT_FAILURE);
         }
         string a = words[0], b = words[1];
         words.erase(words.begin(), words.begin() + 2);

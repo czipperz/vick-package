@@ -22,7 +22,7 @@ static void calculate_dependency(
     if (itr == pacstash.end()) {
         cerr << RED("Error:")
              << " Package not recognized: " << p << endl;
-        throw 13;
+        exit(EXIT_FAILURE);
     }
     for (auto& a : itr->second.second) {
         if (find_if(begin(pac), end(pac), [&a](pair<string, bool>& p) {
@@ -57,7 +57,7 @@ void install_packages(int num_packages, const char* const* packages) {
         filesystemerr:
             cerr << RED("Error:") << " First argument ("
                  << packages[-2] << ") is not a valid file" << endl;
-            throw 4;
+            exit(EXIT_FAILURE);
         }
     }
 
@@ -87,7 +87,7 @@ void install_packages(int num_packages, const char* const* packages) {
 
     if (should_throw) {
         cerr << RED("Error:") << " Some packages aren't registered so won't install any specified" << endl;
-        throw 12;
+        exit(EXIT_FAILURE);
     }
 
     vector<pair<string, bool> > pac;
@@ -106,7 +106,7 @@ void install_packages(int num_packages, const char* const* packages) {
 
     char c = getchar();
     if (not (c == 'Y' or c == 'y' or c == '\n')) {
-        throw 3;
+        exit(EXIT_FAILURE);
     }
     cout << endl;
     for (auto& pack : pac) {
@@ -129,7 +129,7 @@ void install_packages(int num_packages, const char* const* packages) {
                    itr->first + "'";
         int i = system(str.c_str());
         if (i)
-            throw i;
+            exit(EXIT_FAILURE);
         cout << endl;
     }
 }

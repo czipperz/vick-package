@@ -17,9 +17,9 @@
 using namespace std;
 using namespace boost::filesystem;
 
-int main(int argc, char** argv) {
 
-    /* make args not worry about program name */
+int main(int argc, char** argv) {
+    // make args not worry about program name
     argc--;
     argv++;
     create_directory("plugins");

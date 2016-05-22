@@ -14,9 +14,10 @@
 #include "search_packages.hh"
 #include "print_helper.hh"
 
+using namespace std;
+using namespace boost::filesystem;
+
 int main(int argc, char** argv) {
-    using namespace std;
-    using namespace boost::filesystem;
 
     /* make args not worry about program name */
     argc--;

@@ -6,6 +6,7 @@
 #include <boost/filesystem.hpp>
 
 #include "color.hh"
+#include "create_package.hh"
 #include "parse_packages.hh"
 #include "update_packages.hh"
 #include "remove_packages.hh"
@@ -77,6 +78,19 @@ int main(int argc, char** argv) {
         }
         try {
             search_packages(argc - 2, argv + 2);
+        } catch (int i) {
+            return i;
+        }
+    } else if (strcmp(argv[1], "new") == 0 or
+               strcmp(argv[1], "create") == 0) {
+        if (argc > 3) {
+            cerr << RED("Error:") << " Need at most three arguments "
+                                     "when creating package."
+                 << endl;
+            return 16;
+        }
+        try {
+            create_package(argc - 2, argv + 2);
         } catch (int i) {
             return i;
         }

@@ -86,7 +86,9 @@ void install_packages(int num_packages, const char* const* packages) {
     }
 
     if (should_throw) {
-        cerr << RED("Error:") << " Some packages aren't registered so won't install any specified" << endl;
+        cerr << RED("Error:") << " Some packages aren't registered "
+                                 "so won't install any specified"
+             << endl;
         exit(EXIT_FAILURE);
     }
 

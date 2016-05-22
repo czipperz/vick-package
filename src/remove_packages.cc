@@ -22,7 +22,9 @@ void remove_packages(int num_packages, const char* const* packages) {
         }
     }
     if (shouldthrow) {
-        cout << "Some packages don't exist so won't remove any specified." << endl;
+        cout << "Some packages don't exist so won't remove any "
+                "specified."
+             << endl;
         exit(EXIT_FAILURE);
     }
     for (; num_packages; --num_packages, ++packages) {

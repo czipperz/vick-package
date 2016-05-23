@@ -9,14 +9,14 @@
 
 #include "create_package.hh"
 
-void create_package(int argc, char** argv)
+void create_package(char* arg)
 {
     using namespace std;
     using namespace boost::filesystem;
     path this_dir = current_path();
     // create new directory if specified
-    if (argc) {
-        this_dir /= *argv;
+    if (arg) {
+        this_dir /= arg;
         create_directories(this_dir);
         current_path(this_dir);
     }

@@ -68,13 +68,13 @@ int main(int argc, char** argv) {
         search_packages(argc - 2, argv + 2);
     } else if (strcmp(argv[1], "new") == 0 or
                strcmp(argv[1], "create") == 0) {
-        if (argc > 3) {
-            cerr << RED("Error:") << " Need at most three arguments "
-                                     "when creating package."
-                 << endl;
-            return 16;
+        if (argc == 1) {
+            create_package(NULL);
+        } else {
+            for (auto argi = 1; argi != argc; ++argi) {
+                create_package(argv[argi]);
+            }
         }
-        create_package(argc - 2, argv + 2);
     } else {
         cerr << RED("Error:") << " Invalid command \"" << argv[1]
              << "\"." << endl

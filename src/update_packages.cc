@@ -7,50 +7,56 @@
 
 #include "color.hh"
 
-void update_packages(int num_packages, char** packages)
-{
-    using namespace boost::filesystem;
-    using namespace std;
-    const path cur = current_path() / "plugins";
-    const auto fun = [](path p) {
-        cout << BOLD(p.filename().c_str() << ": ") << flush;
-        chdir(p.c_str());
+using namespace boost::filesystem;
+using namespace std;
 
-        int r = system("git pull");
-        if (r)
-            throw r;
-    };
-    if (num_packages) {
-        auto n = num_packages;
-        auto p = packages;
+static bool HAS_ERROR = false;
+
+static void update_directory(path p) {
+    cout << BOLD(p.filename().c_str() << ": ") << flush;
+    auto cmd = "git -C " + p.string() + " pull";
+    if (system(cmd.c_str()))
+        HAS_ERROR = true;
+}
+
+void update_packages(int num, char** packages) {
+    const path cur = current_path() / "plugins";
+    if (num == 0) {
+        for_each(directory_iterator(cur), directory_iterator(),
+                 update_directory);
+    } else {
         auto shouldthrow = false;
-        for (; n; --n, ++p) {
-            auto path = cur / *p;
-            if (not exists(path)) {
-                cerr << RED("Error:")
-                     << " Package you specified to update (" << *p
-                     << ") does not exist." << endl;
-                shouldthrow = true;
-            }
-        }
+        std::for_each(packages, packages + num,
+                      [&cur, &shouldthrow](char* p) {
+                          auto path = cur / p;
+                          if (not exists(path)) {
+                              cerr << RED("Error:")
+                                   << " Package you specified to "
+                                      "update ("
+                                   << *p << ") does not exist."
+                                   << endl;
+                              shouldthrow = true;
+                          }
+                      });
         if (shouldthrow) {
             cerr << RED("Error:") << " Some packages don't exist so "
                                      "won't update any specified."
                  << endl;
             exit(EXIT_FAILURE);
         }
-        for (; num_packages; --num_packages, ++packages) {
-            path p = cur / *packages;
-            if (not exists(p)) {
+        std::for_each(packages, packages + num, [&cur](char* p) {
+            path path = cur / p;
+            if (not exists(path)) {
                 cerr << RED("Error:")
-                     << " Directory you specified to update ("
-                     << *packages << ") does not exist." << endl
+                     << " Directory you specified to update (" << p
+                     << ") does not exist." << endl
                      << "It did when we safety checked!" << endl;
                 exit(EXIT_FAILURE);
             }
-            fun(p);
-        }
-    } else {
-        for_each(directory_iterator(cur), directory_iterator(), fun);
+            update_directory(std::move(path));
+        });
+    }
+    if (HAS_ERROR) {
+        exit(EXIT_FAILURE);
     }
 }

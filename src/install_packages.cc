@@ -97,12 +97,15 @@ void install_packages(const boost::filesystem::path& package_list,
     vector<pair<string, bool> > pac;
     pac.reserve(num_packages);
     for (auto i = packages; i != packages + num_packages; ++i) {
+        // packages explicitly asked for are deleted and recloned
         pac.emplace_back(*i, true);
     }
+    // packages pulled in as dependencies are just updated
     calculate_dependencies(pac, pacstash);
+    // alphabetize so output is pretty
     sort(begin(pac), end(pac));
 
-    cout << BOLD("Packages to install (" << pac.size() << "):");
+    cout << BOLD("Packages to install/update (" << pac.size() << "):");
     for (auto& s : pac) {
         cout << "  " << s.first;
     }

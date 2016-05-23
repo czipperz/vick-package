@@ -3,30 +3,29 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <iostream>
+#include <boost/filesystem.hpp>
 
 #include "color.hh"
 #include "print_helper.hh"
 
+using namespace boost::filesystem;
+using namespace std;
+
 void print_usage(const char* program_name)
 {
-    using namespace std;
     cerr << BOLD("Usage:") << endl
-         << "  " << program_name
-         << " <packagelist> <command> <packages>" << endl
-         << "  <packagelist> is a file that has a list of package, "
-            "url pairs."
-         << endl
-         << "  <command> is update, install, remove, search, or new "
-            "or init."
-         << endl
-         << "    - Abreviations of u, i, r, and s, respectively, can "
-            "be "
-            "used."
-         << endl
-         << "  <packages> are the packages you want to <command>."
-         << endl
-         << "    - Can be empty if <command> is update, in which "
-            "case it "
-            "updates all the packages."
-         << endl;
+         << "  " << program_name << " <command> <options> <packages>\n"
+         << "    <command> is `update`, `install`, `remove`, `search`, or\n"
+         << "                 `create`, `init` or `new` (which are synonyms).\n"
+         << "      - Abreviations of `u`, `i`, `r`, and `s`, respectively, can be\n"
+         << "        used.\n"
+         << "      - When given `i`, `install`, `s`, or `search`, the option\n"
+         << "        `-p` or `--package-list` can be given to specify where to look\n"
+         << "        for package information.  It is automatically inferred based\n"
+         << "        on the program's name.  For this instance it would be:\n"
+         << "          " << path(program_name).parent_path() / "packagelist" << ".\n"
+         << "      - There are no other options.\n"
+         << "    <packages> are the packages you want to <command>.\n"
+         << "      - Can be empty if <command> is update, in which case it updates\n"
+         << "        all the packages.\n";
 }

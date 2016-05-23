@@ -5,9 +5,12 @@
 #ifndef HEADER_GUARD_INSTALL_PACKAGES_H
 #define HEADER_GUARD_INSTALL_PACKAGES_H
 
+#include <boost/filesystem.hpp>
+
 #ifdef __GNUC__
 __attribute__ ((__nonnull__))
 #endif
-void install_packages(int num_packages, const char* const* packages);
+void install_packages(const boost::filesystem::path& package_list,
+                      int num_packages, const char* const* packages);
 
 #endif

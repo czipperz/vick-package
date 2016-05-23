@@ -42,7 +42,8 @@ static void calculate_dependencies(
     }
 }
 
-void install_packages(int num_packages, const char* const* packages) {
+void install_packages(const boost::filesystem::path& package_list,
+                      int num_packages, const char* const* packages) {
     using namespace boost::filesystem;
 
     // ensure valid path to packages
@@ -55,14 +56,15 @@ void install_packages(int num_packages, const char* const* packages) {
         }
         if (not is_regular_file(p)) {
         filesystemerr:
-            cerr << RED("Error:") << " First argument ("
-                 << packages[-2] << ") is not a valid file" << endl;
+            cerr << RED("Error:") << " Package list ("
+                 << package_list.string() << ") is not a valid file"
+                 << endl;
             exit(EXIT_FAILURE);
         }
     }
 
     map<string, pair<string, vector<string> > > pacstash =
-        parse_packages(packages[-2]);
+        parse_packages(package_list.c_str());
 
     const path cur = current_path() / "plugins";
     auto n = num_packages;
@@ -80,14 +82,14 @@ void install_packages(int num_packages, const char* const* packages) {
             cerr << RED("Error:")
                  << " Package you specified to install (" << *p
                  << ") is not a key in the package list you gave ("
-                 << packages[-2] << ")." << endl;
+                 << package_list.string() << ")." << endl;
             should_throw = true;
         }
     }
 
     if (should_throw) {
         cerr << RED("Error:") << " Some packages aren't registered "
-                                 "so won't install any specified"
+                                 "so won't install any specified."
              << endl;
         exit(EXIT_FAILURE);
     }

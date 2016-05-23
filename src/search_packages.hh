@@ -5,9 +5,12 @@
 #ifndef HEADER_GUARD_SEARCH_PACKAGES_H
 #define HEADER_GUARD_SEARCH_PACKAGES_H
 
+#include <boost/filesystem.hpp>
+
 #ifdef __GNUC__
 __attribute__ ((__nonnull__))
 #endif
-void search_packages(int argc, const char* const* arguments);
+void search_packages(const boost::filesystem::path& package_list,
+                     int argc, const char* const* arguments);
 
 #endif

@@ -17,6 +17,26 @@
 using namespace std;
 using namespace boost::filesystem;
 
+static int
+parse_package_list(int& argc, char**& argv, path& package_list) {
+    if (argc >= 1 and (strcmp(argv[0], "--package-list") == 0 or
+                       strcmp(argv[0], "-p") == 0)) {
+        if (argc == 1) {
+            cerr << RED("Error:") << " Need a package list file "
+                                     "when given argument `"
+                 << argv[1] << "`." << endl
+                 << BOLD("Hint:")
+                 << " give a package list as an argument." << endl;
+            return 1;
+        }
+        package_list = argv[2];
+        argc -= 2;
+        argv += 2;
+    } else {
+        package_list = path(argv[-2]).parent_path() / "packagelist";
+    }
+    return 0;
+}
 
 int main(int argc, char** argv) {
     // make args not worry about program name
@@ -24,38 +44,50 @@ int main(int argc, char** argv) {
     argv++;
     create_directory("plugins");
 
-    if (argc < 2) {
-        cerr << RED("Error:") << " Need at least two arguments."
+    if (argc == 0) {
+        cerr << RED("Error:") << " Need a command argument."
              << endl;
         print_usage(argv[-1]);
         return EXIT_FAILURE;
     }
-    if (strcmp(argv[1], "update") == 0 or strcmp(argv[1], "u") == 0) {
-        update_packages(argc - 2, argv + 2);
-    } else if (strcmp(argv[1], "install") == 0 or
-               strcmp(argv[1], "i") == 0) {
-        if (argc < 3) {
-            cerr << RED("Error:") << " Need at least three arguments "
-                                     "when not updating."
+    if (strcmp(argv[0], "--help") == 0 or
+        strcmp(argv[0], "help") == 0) {
+        print_usage(argv[-1]);
+        return EXIT_SUCCESS;
+    } else if (strcmp(argv[0], "update") == 0 or
+        strcmp(argv[0], "u") == 0) {
+        update_packages(argc - 1, argv + 1);
+    } else if (strcmp(argv[0], "install") == 0 or
+               strcmp(argv[0], "i") == 0) {
+        if (argc == 1) {
+        install_error:
+            cerr << RED("Error:") << " Need some packages to install "
+                                     "when installing packages."
                  << endl
-                 << BOLD("Hint:") << " give some packages to install"
+                 << BOLD("Hint:") << " give some packages to install."
                  << endl;
             return EXIT_FAILURE;
         }
-        install_packages(argc - 2, argv + 2);
-    } else if (strcmp(argv[1], "remove") == 0 or
-               strcmp(argv[1], "r") == 0) {
-        if (argc < 3) {
-            cerr << RED("Error:") << " Need at least three arguments "
-                                     "when not updating."
-                 << endl
-                 << BOLD("Hint:") << " give some packages to remove"
-                 << endl;
-            return 14;
+        path package_list;
+        argc--;
+        argv++;
+        if (parse_package_list(argc, argv, package_list)) {
+            goto install_error;
         }
-        remove_packages(argc - 2, argv + 2);
-    } else if (strcmp(argv[1], "search") == 0 or
-               strcmp(argv[1], "s") == 0) {
+        install_packages(package_list, argc, argv);
+    } else if (strcmp(argv[0], "remove") == 0 or
+               strcmp(argv[0], "r") == 0) {
+        if (argc < 2) {
+            cerr << RED("Error:") << " Need some packages to remove "
+                                     "when removing packages."
+                 << endl
+                 << BOLD("Hint:") << " give some packages to remove."
+                 << endl;
+            return EXIT_FAILURE;
+        }
+        remove_packages(argc - 1, argv + 1);
+    } else if (strcmp(argv[0], "search") == 0 or
+               strcmp(argv[0], "s") == 0) {
         if (argc > 3) {
             cerr << RED("Error:")
                  << " Need at most three arguments when searching."
@@ -65,9 +97,16 @@ int main(int argc, char** argv) {
                  << endl;
             return EXIT_FAILURE;
         }
-        search_packages(argc - 2, argv + 2);
-    } else if (strcmp(argv[1], "new") == 0 or
-               strcmp(argv[1], "create") == 0) {
+        path package_list;
+        argc--;
+        argv++;
+        if (parse_package_list(argc, argv, package_list)) {
+            exit(EXIT_FAILURE);
+        }
+        search_packages(package_list, argc - 1, argv + 1);
+    } else if (strcmp(argv[0], "create") == 0 or
+               strcmp(argv[0], "init") == 0 or
+               strcmp(argv[0], "new") == 0) {
         if (argc == 1) {
             create_package(NULL);
         } else {

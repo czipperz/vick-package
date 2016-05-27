@@ -8,8 +8,8 @@
 
 #include "parse_packages.hh"
 
-static std::vector<std::string> words_in_line(const std::string& line)
-{
+static std::vector<std::string>
+words_in_line(const std::string& line) {
     using namespace std;
     vector<string> words;
     string::const_iterator b = begin(line), it, e = end(line);
@@ -31,10 +31,11 @@ static std::vector<std::string> words_in_line(const std::string& line)
     return words;
 }
 
-std::map<std::string, std::pair<std::string, std::vector<std::string> > >
-parse_packages(std::string filename)
-{
-    std::map<std::string, std::pair<std::string, std::vector<std::string> > >
+std::map<std::string,
+         std::pair<std::string, std::vector<std::string> > >
+parse_packages(std::string filename) {
+    std::map<std::string,
+             std::pair<std::string, std::vector<std::string> > >
         lines;
 
     using namespace std;
@@ -51,13 +52,14 @@ parse_packages(std::string filename)
         if (words.empty())
             continue;
         if (words.size() < 2) {
-            cout << "Parse error: Less than 2 arguments on line " << linenum
-                 << " of " << filename << "." << endl;
+            cout << "Parse error: Less than 2 arguments on line "
+                 << linenum << " of " << filename << "." << endl;
             exit(EXIT_FAILURE);
         }
         string a = words[0], b = words[1];
         words.erase(words.begin(), words.begin() + 2);
-        lines[move(a)] = pair<string, vector<string> >(move(b), move(words));
+        lines[move(a)] =
+            pair<string, vector<string> >(move(b), move(words));
     }
 
     return lines;

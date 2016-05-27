@@ -9,7 +9,8 @@
 #include <string>
 #include <vector>
 
-std::map<std::string, std::pair<std::string, std::vector<std::string> > >
+std::map<std::string,
+         std::pair<std::string, std::vector<std::string> > >
 parse_packages(std::string filename);
 
 #endif

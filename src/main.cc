@@ -2,17 +2,17 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include <iostream>
 #include <boost/filesystem.hpp>
+#include <iostream>
 
 #include "color.hh"
 #include "create_package.hh"
-#include "parse_packages.hh"
-#include "update_packages.hh"
-#include "remove_packages.hh"
 #include "install_packages.hh"
-#include "search_packages.hh"
+#include "parse_packages.hh"
 #include "print_helper.hh"
+#include "remove_packages.hh"
+#include "search_packages.hh"
+#include "update_packages.hh"
 
 using namespace std;
 using namespace boost::filesystem;
@@ -45,8 +45,7 @@ int main(int argc, char** argv) {
     create_directory("plugins");
 
     if (argc == 0) {
-        cerr << RED("Error:") << " Need a command argument."
-             << endl;
+        cerr << RED("Error:") << " Need a command argument." << endl;
         print_usage(argv[-1]);
         return EXIT_FAILURE;
     }
@@ -55,7 +54,7 @@ int main(int argc, char** argv) {
         print_usage(argv[-1]);
         return EXIT_SUCCESS;
     } else if (strcmp(argv[0], "update") == 0 or
-        strcmp(argv[0], "u") == 0) {
+               strcmp(argv[0], "u") == 0) {
         update_packages(argc - 1, argv + 1);
     } else if (strcmp(argv[0], "install") == 0 or
                strcmp(argv[0], "i") == 0) {

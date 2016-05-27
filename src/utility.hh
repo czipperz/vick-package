@@ -8,8 +8,8 @@
 #include <string>
 
 template <class Itr, class Out, class Pred>
-void split(Itr begin, Itr end, Out falselist, Out truelist, Pred pred)
-{
+void split(Itr begin, Itr end, Out falselist, Out truelist,
+           Pred pred) {
     if (begin == end)
         return;
     for (; begin != end; ++begin)

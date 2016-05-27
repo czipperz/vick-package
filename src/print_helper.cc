@@ -2,8 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include <iostream>
 #include <boost/filesystem.hpp>
+#include <iostream>
 
 #include "color.hh"
 #include "print_helper.hh"

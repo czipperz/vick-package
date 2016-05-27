@@ -26,18 +26,16 @@ void update_packages(int num, char** packages) {
                  update_directory);
     } else {
         auto shouldthrow = false;
-        std::for_each(packages, packages + num,
-                      [&cur, &shouldthrow](char* p) {
-                          auto path = cur / p;
-                          if (not exists(path)) {
-                              cerr << RED("Error:")
-                                   << " Package you specified to "
-                                      "update ("
-                                   << *p << ") does not exist."
-                                   << endl;
-                              shouldthrow = true;
-                          }
-                      });
+        std::for_each(packages, packages + num, [&cur, &shouldthrow](
+                                                    char* p) {
+            auto path = cur / p;
+            if (not exists(path)) {
+                cerr << RED("Error:") << " Package you specified to "
+                                         "update ("
+                     << *p << ") does not exist." << endl;
+                shouldthrow = true;
+            }
+        });
         if (shouldthrow) {
             cerr << RED("Error:") << " Some packages don't exist so "
                                      "won't update any specified."

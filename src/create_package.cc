@@ -3,14 +3,13 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <boost/filesystem.hpp>
+#include <cctype>
 #include <fstream>
 #include <iostream>
-#include <cctype>
 
 #include "create_package.hh"
 
-void create_package(char* arg)
-{
+void create_package(char* arg) {
     using namespace std;
     using namespace boost::filesystem;
     path this_dir = current_path();
@@ -28,14 +27,15 @@ void create_package(char* arg)
     // README.md
     {
         std::ofstream f("README.md");
-        std::cout << "What is your GitHub username (blank=none or don't use Travis-Ci)? ";
+        std::cout << "What is your GitHub username (blank=none or "
+                     "don't use Travis-Ci)? ";
         getline(cin, username);
         f << "# " << dirname;
         if (!username.empty()) {
-            f << " [![Build Status](https://travis-ci.org/" << username
-              << "/" << dirname
-              << ".svg?branch=master)](https://travis-ci.org/" << username
-              << "/" << dirname << ")";
+            f << " [![Build Status](https://travis-ci.org/"
+              << username << "/" << dirname
+              << ".svg?branch=master)](https://travis-ci.org/"
+              << username << "/" << dirname << ")";
         }
         f << endl;
     }
@@ -457,9 +457,11 @@ script:
         all_caps = "HEADER_GUARD_" + all_caps;
         f << "#ifndef " << all_caps << endl
           << "#define " << all_caps << endl
-          << '\n' << "/*!\n * \\file " << dirname
+          << '\n'
+          << "/*!\n * \\file " << dirname
           << "/lib.hh\n * \\brief\n */" << endl
-          << '\n' << "#endif" << endl;
+          << '\n'
+          << "#endif" << endl;
     }
 
     // .gitignore

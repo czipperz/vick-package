@@ -9,8 +9,7 @@
 #include "search_packages.hh"
 
 void search_packages(const boost::filesystem::path& package_list,
-                     int argc, const char* const* arguments)
-{
+                     int argc, const char* const* arguments) {
     using namespace std;
     using namespace boost::filesystem;
     // ensure valid path to packages
@@ -23,8 +22,8 @@ void search_packages(const boost::filesystem::path& package_list,
         }
         if (not is_regular_file(p)) {
         filesystemerr:
-            cerr << RED("Error:") << " Package list ("
-                 << package_list << ") is not a valid file" << endl;
+            cerr << RED("Error:") << " Package list (" << package_list
+                 << ") is not a valid file" << endl;
             exit(EXIT_FAILURE);
         }
     }
@@ -36,8 +35,7 @@ void search_packages(const boost::filesystem::path& package_list,
 #define loop(cond)                                                   \
     for (auto it = pacstash.begin(); it != pacstash.end(); ++it) {   \
         if (cond) {                                                  \
-            cout << BOLD(it->first)                                  \
-                 << endl;                                            \
+            cout << BOLD(it->first) << endl;                         \
         }                                                            \
     }
 

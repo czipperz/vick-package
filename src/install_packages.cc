@@ -13,21 +13,21 @@
 
 using namespace std;
 static void calculate_dependency(
-    const string& p,
-    vector<pair<string, bool> >& pac,
-    const map<string, pair<string, vector<string> > >& pacstash)
-{
-    if (p.empty()) return;
+    const string& p, vector<pair<string, bool> >& pac,
+    const map<string, pair<string, vector<string> > >& pacstash) {
+    if (p.empty())
+        return;
     auto itr = pacstash.find(p);
     if (itr == pacstash.end()) {
-        cerr << RED("Error:")
-             << " Package not recognized: " << p << endl;
+        cerr << RED("Error:") << " Package not recognized: " << p
+             << endl;
         exit(EXIT_FAILURE);
     }
     for (auto& a : itr->second.second) {
-        if (find_if(begin(pac), end(pac), [&a](pair<string, bool>& p) {
-                return a == p.first;
-            }) == end(pac)) {
+        if (find_if(begin(pac), end(pac),
+                    [&a](pair<string, bool>& p) {
+                        return a == p.first;
+                    }) == end(pac)) {
             pac.emplace_back(a, false);
             calculate_dependency(a, pac, pacstash);
         }
@@ -35,8 +35,7 @@ static void calculate_dependency(
 }
 static void calculate_dependencies(
     vector<pair<string, bool> >& pac,
-    const map<string, pair<string, vector<string> > >& pacstash)
-{
+    const map<string, pair<string, vector<string> > >& pacstash) {
     for (auto& p : pac) {
         calculate_dependency(p.first, pac, pacstash);
     }
@@ -105,14 +104,15 @@ void install_packages(const boost::filesystem::path& package_list,
     // alphabetize so output is pretty
     sort(begin(pac), end(pac));
 
-    cout << BOLD("Packages to install/update (" << pac.size() << "):");
+    cout << BOLD("Packages to install/update (" << pac.size()
+                                                << "):");
     for (auto& s : pac) {
         cout << "  " << s.first;
     }
     cout << endl << BOLD("Continue with installation? [Y,n] ");
 
     char c = getchar();
-    if (not (c == 'Y' or c == 'y' or c == '\n')) {
+    if (not(c == 'Y' or c == 'y' or c == '\n')) {
         exit(EXIT_FAILURE);
     }
     cout << endl;

@@ -9,15 +9,20 @@
 
 #include "create_package.hh"
 
-void create_package(char* arg) {
+void create_package(char* progname, char* arg) {
     using namespace std;
     using namespace boost::filesystem;
-    path this_dir = current_path();
-    // create new directory if specified
+
+    path this_dir;
     if (arg) {
-        this_dir /= arg;
+        // create new directory in plugins
+        this_dir = path(progname).parent_path().parent_path() /
+                   "plugins" / arg;
         create_directories(this_dir);
         current_path(this_dir);
+    } else {
+        // use current directory if none specified
+        this_dir = current_path();
     }
     system("git init");
 

@@ -5,6 +5,6 @@
 #ifndef HEADER_GUARD_CREATE_PACKAGE_H
 #define HEADER_GUARD_CREATE_PACKAGE_H
 
-void create_package(char* arg);
+void create_package(char* progname, char* arg);
 
 #endif

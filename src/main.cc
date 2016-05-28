@@ -107,10 +107,10 @@ int main(int argc, char** argv) {
                strcmp(argv[0], "init") == 0 or
                strcmp(argv[0], "new") == 0) {
         if (argc == 1) {
-            create_package(NULL);
+            create_package(argv[-1], NULL);
         } else {
             for (auto argi = 1; argi != argc; ++argi) {
-                create_package(argv[argi]);
+                create_package(argv[-1], argv[argi]);
             }
         }
     } else {

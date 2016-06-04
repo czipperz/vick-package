@@ -463,7 +463,7 @@ script:
                 c = toupper(c);
             }
         }
-        all_caps = "HEADER_GUARD_" + all_caps;
+        all_caps = "HEADER_GUARD_" + all_caps + "_H";
         f << "#ifndef " << all_caps << endl
           << "#define " << all_caps << endl
           << '\n'

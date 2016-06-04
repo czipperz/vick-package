@@ -457,7 +457,11 @@ script:
         std::ofstream f("lib.hh");
         string all_caps = dirname;
         for (auto& c : all_caps) {
-            c = toupper(c);
+            if (c == '-') {
+                c = '_';
+            } else {
+                c = toupper(c);
+            }
         }
         all_caps = "HEADER_GUARD_" + all_caps;
         f << "#ifndef " << all_caps << endl

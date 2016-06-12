@@ -3,8 +3,9 @@ srcout = out
 test = test
 testout = testout
 
-CXX = g++
-CXXFLAGS = -std=c++11 -Wall -Wpedantic -Wextra
+CXX = clang++
+CXXFLAGS = -std=c++11 -Weverything \
+-Wno-c++98-compat -Wno-c++98-compat-pedantic
 LDFLAGS = -lboost_filesystem -lboost_system
 
 ifeq (${DEBUG_MODE},true)

@@ -10,22 +10,23 @@ void remove_packages(int num_packages, const char* const* packages) {
     using namespace boost::filesystem;
     using namespace std;
     const path cur = current_path() / "plugins";
-    auto n = num_packages;
-    auto p = packages;
-    auto shouldthrow = false;
-    for (; n; --n, ++p) {
-        auto path = cur / *p;
-        if (not exists(path)) {
-            printf("Package you specified to remove (%s) does not "
-                   "exist.\n",
-                   *p);
-            shouldthrow = true;
+    {
+        auto shouldthrow = false;
+        for (auto p = packages; p != num_packages + packages; ++p) {
+            auto path = cur / *p;
+            if (not exists(path)) {
+                printf("Package you specified to remove (%s) does "
+                       "not exist.\n",
+                       *p);
+                // diagnose all packages before exiting
+                shouldthrow = true;
+            }
         }
-    }
-    if (shouldthrow) {
-        puts("Some packages don't exist so won't remove any "
-             "specified.");
-        exit(EXIT_FAILURE);
+        if (shouldthrow) {
+            puts("Some packages don't exist so won't remove any "
+                "specified.");
+            exit(EXIT_FAILURE);
+        }
     }
     for (; num_packages; --num_packages, ++packages) {
         path p = cur / *packages;

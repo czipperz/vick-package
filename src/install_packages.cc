@@ -4,7 +4,7 @@
 
 #include <algorithm>
 #include <boost/filesystem.hpp>
-#include <iostream>
+#include <cstdio>
 #include <map>
 
 #include "color.hh"
@@ -19,8 +19,9 @@ static void calculate_dependency(
         return;
     auto itr = pacstash.find(p);
     if (itr == pacstash.end()) {
-        cerr << RED("Error:") << " Package not recognized: " << p
-             << endl;
+        std::fprintf(stderr,
+                     "%sError:%s Package not regonized: %s.\n",
+                     color::red, color::clear, p.c_str());
         exit(EXIT_FAILURE);
     }
     for (auto& a : itr->second.second) {
@@ -55,9 +56,10 @@ void install_packages(const boost::filesystem::path& package_list,
         }
         if (not is_regular_file(p)) {
         filesystemerr:
-            cerr << RED("Error:") << " Package list ("
-                 << package_list.string() << ") is not a valid file"
-                 << endl;
+            std::fprintf(stderr, "%sError:%s Package list (%s) is "
+                                 "not a valid file.\n",
+                         color::red, color::clear,
+                         package_list.c_str());
             exit(EXIT_FAILURE);
         }
     }
@@ -72,24 +74,27 @@ void install_packages(const boost::filesystem::path& package_list,
     for (; n; --n, ++p) {
         path comb = cur / *p;
         if (exists(comb)) {
-            cerr << BOLD("Warning:")
-                 << " Package you specified to install (" << *p
-                 << ") is already installed." << endl
-                 << "  Will remove and reinstall!" << endl;
+            std::fprintf(stderr, "%sWarning:%s Package you specified "
+                                 "to install (%s) is already "
+                                 "installed.\n  Will remove and "
+                                 "reinstall!\n",
+                         color::bold, color::clear, *p);
         }
         if (pacstash.find(*p) == pacstash.end()) {
-            cerr << RED("Error:")
-                 << " Package you specified to install (" << *p
-                 << ") is not a key in the package list you gave ("
-                 << package_list.string() << ")." << endl;
+            std::fprintf(stderr, "%sError:%s Package you specified "
+                                 "to install (%s) is not a key in "
+                                 "the package list you gave (%s).\n",
+                         color::red, color::clear, *p,
+                         package_list.c_str());
             should_throw = true;
         }
     }
 
     if (should_throw) {
-        cerr << RED("Error:") << " Some packages aren't registered "
-                                 "so won't install any specified."
-             << endl;
+        std::fprintf(stderr, "%sError:%s Some packages aren't "
+                             "registered so won't install any "
+                             "specified.\n",
+                     color::red, color::clear);
         exit(EXIT_FAILURE);
     }
 
@@ -104,18 +109,19 @@ void install_packages(const boost::filesystem::path& package_list,
     // alphabetize so output is pretty
     sort(begin(pac), end(pac));
 
-    cout << BOLD("Packages to install/update (" << pac.size()
-                                                << "):");
+    printf("%sPackages to install/update (%zu):%s", color::bold,
+           pac.size(), color::clear);
     for (auto& s : pac) {
-        cout << "  " << s.first;
+        printf("  %s", s.first.c_str());
     }
-    cout << endl << BOLD("Continue with installation? [Y,n] ");
+    printf("\n%sContinue with installation? [Y,n]%s ", color::bold,
+           color::clear);
 
     char c = getchar();
     if (not(c == 'Y' or c == 'y' or c == '\n')) {
         exit(EXIT_FAILURE);
     }
-    cout << endl;
+    putchar('\n');
     for (auto& pack : pac) {
         chdir(cur.c_str());
         auto itr = pacstash.find(pack.first);
@@ -125,18 +131,22 @@ void install_packages(const boost::filesystem::path& package_list,
                 remove_all(p);
             } else {
                 chdir(p.c_str());
-                cout << BOLD(itr->first) << ':' << endl;
+                printf("%s%s:%s\n", color::bold, itr->first.c_str(),
+                       color::clear);
+                fflush(stdout);
                 system("git pull");
-                cout << endl;
+                putchar('\n');
                 continue;
             }
         }
-        cout << BOLD(itr->first) << ':' << endl;
+        printf("%s%s:%s\n", color::bold, itr->first.c_str(),
+               color::clear);
+        fflush(stdout);
         auto str = string("git clone '") + itr->second.first + "' '" +
                    itr->first + "'";
         int i = system(str.c_str());
         if (i)
             exit(EXIT_FAILURE);
-        cout << endl;
+        putchar('\n');
     }
 }

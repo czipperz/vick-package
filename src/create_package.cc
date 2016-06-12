@@ -24,6 +24,7 @@ void create_package(char* progname, char* arg) {
         // use current directory if none specified
         this_dir = current_path();
     }
+    fflush(stdout);
     system("git init");
 
     string dirname = this_dir.filename().string();
@@ -32,8 +33,9 @@ void create_package(char* progname, char* arg) {
     // README.md
     {
         std::ofstream f("README.md");
-        std::cout << "What is your GitHub username (blank=none or "
-                     "don't use Travis-Ci)? ";
+        puts("What is your GitHub username?\n"
+             "(no response will not create your README with a "
+             "Travis-Ci sticker)");
         getline(cin, username);
         f << "# " << dirname;
         if (!username.empty()) {

@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <boost/filesystem.hpp>
-#include <iostream>
+#include <cstdio>
 
 #include "color.hh"
 
@@ -13,7 +13,9 @@ using namespace std;
 static bool HAS_ERROR = false;
 
 static void update_directory(path p) {
-    cout << BOLD(p.filename().c_str() << ": ") << flush;
+    printf("%s%s:%s ", color::bold, p.filename().c_str(),
+           color::clear);
+    fflush(stdout);
     auto cmd = "git -C " + p.string() + " pull";
     if (system(cmd.c_str()))
         HAS_ERROR = true;
@@ -30,25 +32,25 @@ void update_packages(int num, char** packages) {
                                                     char* p) {
             auto path = cur / p;
             if (not exists(path)) {
-                cerr << RED("Error:") << " Package you specified to "
-                                         "update ("
-                     << *p << ") does not exist." << endl;
+                fprintf(stderr, "%sError:%s Package you specified to "
+                                "update (%s) does not exist.\n",
+                        color::red, color::clear, p);
                 shouldthrow = true;
             }
         });
         if (shouldthrow) {
-            cerr << RED("Error:") << " Some packages don't exist so "
-                                     "won't update any specified."
-                 << endl;
+            fprintf(stderr, "%sError:%s Some packages don't exist so "
+                            "won't update any specified.\n",
+                    color::red, color::clear);
             exit(EXIT_FAILURE);
         }
         std::for_each(packages, packages + num, [&cur](char* p) {
             path path = cur / p;
             if (not exists(path)) {
-                cerr << RED("Error:")
-                     << " Directory you specified to update (" << p
-                     << ") does not exist." << endl
-                     << "It did when we safety checked!" << endl;
+                fprintf(stderr, "%sError:%s Directory you specified "
+                                "to update (%s) does not exist.\nIt "
+                                "did when we safety checked!\n",
+                        color::red, color::clear, p);
                 exit(EXIT_FAILURE);
             }
             update_directory(std::move(path));

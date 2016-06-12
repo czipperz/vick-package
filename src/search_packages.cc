@@ -2,7 +2,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include <iostream>
+#include <cstdio>
 
 #include "color.hh"
 #include "parse_packages.hh"
@@ -22,8 +22,9 @@ void search_packages(const boost::filesystem::path& package_list,
         }
         if (not is_regular_file(p)) {
         filesystemerr:
-            cerr << RED("Error:") << " Package list (" << package_list
-                 << ") is not a valid file" << endl;
+            fprintf(stderr, "%sError:%s Package list (%s) is not a "
+                            "valid file.\n",
+                    color::red, color::clear, package_list.c_str());
             exit(EXIT_FAILURE);
         }
     }
@@ -35,7 +36,8 @@ void search_packages(const boost::filesystem::path& package_list,
 #define loop(cond)                                                   \
     for (auto it = pacstash.begin(); it != pacstash.end(); ++it) {   \
         if (cond) {                                                  \
-            cout << BOLD(it->first) << endl;                         \
+            printf("%s%s%s\n", color::bold, it->first.c_str(),       \
+                   color::clear);                                    \
         }                                                            \
     }
 

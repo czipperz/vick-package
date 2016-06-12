@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <boost/filesystem.hpp>
-#include <iostream>
+#include <cstdio>
 
 #include "color.hh"
 #include "create_package.hh"
@@ -22,11 +22,12 @@ parse_package_list(int& argc, char**& argv, path& package_list) {
     if (argc >= 1 and (strcmp(argv[0], "--package-list") == 0 or
                        strcmp(argv[0], "-p") == 0)) {
         if (argc == 1) {
-            cerr << RED("Error:") << " Need a package list file "
-                                     "when given argument `"
-                 << argv[1] << "`." << endl
-                 << BOLD("Hint:")
-                 << " give a package list as an argument." << endl;
+            std::fprintf(stderr, "%sError:%s Need a package list "
+                                 "file when giving argument "
+                                 "`%s`.\n%sHint:%s give a package "
+                                 "list as an argument.\n",
+                         color::red, color::clear, argv[1],
+                         color::bold, color::clear);
             return 1;
         }
         package_list = argv[2];
@@ -45,7 +46,8 @@ int main(int argc, char** argv) {
     create_directory("plugins");
 
     if (argc == 0) {
-        cerr << RED("Error:") << " Need a command argument." << endl;
+        std::fprintf(stderr, "%sError:%s Need a command argument.",
+                     color::red, color::clear);
         print_usage(argv[-1]);
         return EXIT_FAILURE;
     }
@@ -60,11 +62,12 @@ int main(int argc, char** argv) {
                strcmp(argv[0], "i") == 0) {
         if (argc == 1) {
         install_error:
-            cerr << RED("Error:") << " Need some packages to install "
-                                     "when installing packages."
-                 << endl
-                 << BOLD("Hint:") << " give some packages to install."
-                 << endl;
+            std::fprintf(stderr, "%sError:%s Need some packages to "
+                                 "install when installing "
+                                 "packages.\n%sHint:%s give some "
+                                 "packages to install.\n",
+                         color::red, color::clear, color::bold,
+                         color::clear);
             return EXIT_FAILURE;
         }
         path package_list;
@@ -77,23 +80,24 @@ int main(int argc, char** argv) {
     } else if (strcmp(argv[0], "remove") == 0 or
                strcmp(argv[0], "r") == 0) {
         if (argc < 2) {
-            cerr << RED("Error:") << " Need some packages to remove "
-                                     "when removing packages."
-                 << endl
-                 << BOLD("Hint:") << " give some packages to remove."
-                 << endl;
+            std::fprintf(stderr, "%sError:%s Need some packages to "
+                                 "remove when removing "
+                                 "packages.\n%sHint:%s give some "
+                                 "packages to remove.\n",
+                         color::red, color::clear, color::bold,
+                         color::clear);
             return EXIT_FAILURE;
         }
         remove_packages(argc - 1, argv + 1);
     } else if (strcmp(argv[0], "search") == 0 or
                strcmp(argv[0], "s") == 0) {
         if (argc > 3) {
-            cerr << RED("Error:")
-                 << " Need at most three arguments when searching."
-                 << endl
-                 << BOLD("Hint:")
-                 << " give a search query (or leave it blank)"
-                 << endl;
+            std::fprintf(stderr,
+                         "%sError:%s Need at most three arguments "
+                         "when searching.\n%sHint:%s give a search "
+                         "query (or leave it blank).\n",
+                         color::red, color::clear, color::bold,
+                         color::clear);
             return EXIT_FAILURE;
         }
         path package_list;
@@ -114,10 +118,11 @@ int main(int argc, char** argv) {
             }
         }
     } else {
-        cerr << RED("Error:") << " Invalid command \"" << argv[1]
-             << "\"." << endl
-             << BOLD("Hint:")
-             << " Use update, install, or remove instead." << endl;
+        std::fprintf(stderr, "%sError:%s Invalid command "
+                             "`%s`.\n%sHint:%s Use update, install, "
+                             "or remove instead.\n",
+                     color::red, color::clear, argv[1], color::bold,
+                     color::clear);
         return EXIT_FAILURE;
     }
 }

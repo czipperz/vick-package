@@ -4,7 +4,7 @@
 
 #include "remove_packages.hh"
 #include <boost/filesystem.hpp>
-#include <iostream>
+#include <cstdio>
 
 void remove_packages(int num_packages, const char* const* packages) {
     using namespace boost::filesystem;
@@ -16,26 +16,25 @@ void remove_packages(int num_packages, const char* const* packages) {
     for (; n; --n, ++p) {
         auto path = cur / *p;
         if (not exists(path)) {
-            cout << "Package you specified to remove (" << *p
-                 << ") does not exist." << endl;
+            printf("Package you specified to remove (%s) does not "
+                   "exist.\n",
+                   *p);
             shouldthrow = true;
         }
     }
     if (shouldthrow) {
-        cout << "Some packages don't exist so won't remove any "
-                "specified."
-             << endl;
+        puts("Some packages don't exist so won't remove any "
+             "specified.");
         exit(EXIT_FAILURE);
     }
     for (; num_packages; --num_packages, ++packages) {
         path p = cur / *packages;
         if (not exists(p)) {
-            cout << "Directory you specified to remove (" << *packages
-                 << ") does not exist." << endl
-                 << "It did when we safety checked!" << endl;
+            printf("Directory you specified to remove (%s) does not "
+                   "exist.\nIt did when we safety checked!\n",
+                   *packages);
             exit(EXIT_FAILURE);
         }
-        /* ensure not unistd.h's remove */
-        boost::filesystem::remove_all(p);
+        remove_all(p);
     }
 }

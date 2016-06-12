@@ -3,7 +3,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include <boost/filesystem.hpp>
-#include <iostream>
+#include <cstdio>
 
 #include "color.hh"
 #include "print_helper.hh"
@@ -11,21 +11,25 @@
 using namespace boost::filesystem;
 using namespace std;
 
-void print_usage(const char* program_name)
-{
-    cerr << BOLD("Usage:") << endl
-         << "  " << program_name << " <command> <options> <packages>\n"
-         << "    <command> is `update`, `install`, `remove`, `search`, or\n"
-         << "                 `create`, `init` or `new` (which are synonyms).\n"
-         << "      - Abreviations of `u`, `i`, `r`, and `s`, respectively, can be\n"
-         << "        used.\n"
-         << "      - When given `i`, `install`, `s`, or `search`, the option\n"
-         << "        `-p` or `--package-list` can be given to specify where to look\n"
-         << "        for package information.  It is automatically inferred based\n"
-         << "        on the program's name.  For this instance it would be:\n"
-         << "          " << path(program_name).parent_path() / "packagelist" << ".\n"
-         << "      - There are no other options.\n"
-         << "    <packages> are the packages you want to <command>.\n"
-         << "      - Can be empty if <command> is update, in which case it updates\n"
-         << "        all the packages.\n";
+void print_usage(const char* program_name) {
+    fprintf(stderr,
+            R"(%sUsage:%s
+  %s <command> <options> <packages>
+    <command is `update`, `install`, `remove`, `search`, or
+                `create`, `init`, or `new` (which are synonyms).
+      - Abbreviations of `u`, `i`, `r`, and `s`, respectively, can be
+        used.
+      - When given `i`, `install`, `s`, or `search`, the option
+        `-p` or `--package-list` can be given to specify where to look
+        for package information.  It is automatically inferred based
+        on the program's name.  For this instance it would be:
+          %s.
+      - There are no other options.
+    <packages> are the packages you want to <command>.
+      - Can be empty if <command> is update, in which case it updates
+        all the packages.
+)",
+            color::bold, color::clear, program_name,
+            (path(program_name).parent_path() / "packagelist")
+                .c_str());
 }

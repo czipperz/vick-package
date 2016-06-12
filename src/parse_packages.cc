@@ -4,7 +4,7 @@
 
 #include <algorithm>
 #include <fstream>
-#include <iostream>
+#include <cstdio>
 
 #include "parse_packages.hh"
 
@@ -41,7 +41,7 @@ parse_packages(std::string filename) {
     using namespace std;
     ifstream file(filename);
     if (not file) {
-        cout << "File does not exist: " << filename << endl;
+        std::printf("File does not exist: %s\n", filename.c_str());
         exit(EXIT_FAILURE);
     }
 
@@ -52,8 +52,9 @@ parse_packages(std::string filename) {
         if (words.empty())
             continue;
         if (words.size() < 2) {
-            cout << "Parse error: Less than 2 arguments on line "
-                 << linenum << " of " << filename << "." << endl;
+            std::printf("Parse error: Less than 2 arguments on line "
+                        "%zu of %s.\n",
+                        linenum, filename.c_str());
             exit(EXIT_FAILURE);
         }
         string a = words[0], b = words[1];

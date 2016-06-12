@@ -102,8 +102,8 @@ int main(int argc, char** argv) {
             return EXIT_FAILURE;
         }
         path package_list;
-        argc--;
-        argv++;
+        --argc;
+        ++argv;
         if (parse_package_list(argc, argv, package_list)) {
             exit(EXIT_FAILURE);
         }

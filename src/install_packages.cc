@@ -117,7 +117,7 @@ void install_packages(const boost::filesystem::path& package_list,
     printf("\n%sContinue with installation? [Y,n]%s ", color::bold,
            color::clear);
 
-    char c = getchar();
+    auto c = getchar();
     if (not(c == 'Y' or c == 'y' or c == '\n')) {
         exit(EXIT_FAILURE);
     }

@@ -91,11 +91,12 @@ int main(int argc, char** argv) {
         remove_packages(argc - 1, argv + 1);
     } else if (strcmp(argv[0], "search") == 0 or
                strcmp(argv[0], "s") == 0) {
-        if (argc > 3) {
-            std::fprintf(stderr,
-                         "%sError:%s Need at most three arguments "
-                         "when searching.\n%sHint:%s give a search "
-                         "query (or leave it blank).\n",
+        if (argc > 4) {
+            std::fprintf(stderr, "%sError:%s Need at most four "
+                                 "arguments when "
+                                 "searching.\n%sHint:%s can only "
+                                 "give `-p`/`--package-list` (and a "
+                                 "package list) and a query.\n",
                          color::red, color::clear, color::bold,
                          color::clear);
             return EXIT_FAILURE;
@@ -106,7 +107,7 @@ int main(int argc, char** argv) {
         if (parse_package_list(argc, argv, package_list)) {
             exit(EXIT_FAILURE);
         }
-        search_packages(package_list, argc - 1, argv + 1);
+        search_packages(package_list, argc, argv);
     } else if (strcmp(argv[0], "create") == 0 or
                strcmp(argv[0], "init") == 0 or
                strcmp(argv[0], "new") == 0) {

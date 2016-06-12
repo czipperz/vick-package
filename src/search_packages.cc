@@ -14,14 +14,7 @@ void search_packages(const boost::filesystem::path& package_list,
     using namespace boost::filesystem;
     // ensure valid path to packages
     {
-        path p;
-        try {
-            p = arguments[-2];
-        } catch (filesystem_error&) {
-            goto filesystemerr;
-        }
-        if (not is_regular_file(p)) {
-        filesystemerr:
+        if (not is_regular_file(package_list)) {
             fprintf(stderr, "%sError:%s Package list (%s) is not a "
                             "valid file.\n",
                     color::red, color::clear, package_list.c_str());
@@ -30,7 +23,7 @@ void search_packages(const boost::filesystem::path& package_list,
     }
 
     map<string, pair<string, vector<string> > > pacstash =
-        parse_packages(arguments[-2]);
+        parse_packages(package_list.string());
 
 // define common loop body as only if changes
 #define loop(cond)                                                   \

@@ -6,8 +6,21 @@
 #include <cctype>
 #include <fstream>
 #include <iostream>
+#include <cstdio>
+#include <algorithm>
 
 #include "create_package.hh"
+
+struct file {
+    file(const char* fname) {
+        impl = fopen(fname, "w");
+    }
+    ~file() {
+        fclose(impl);
+    }
+    operator FILE*() { return impl; }
+    FILE* impl;
+};
 
 void create_package(char* progname, char* arg) {
     using namespace std;
@@ -27,30 +40,35 @@ void create_package(char* progname, char* arg) {
     fflush(stdout);
     system("git init");
 
+    create_directory("src");
+    create_directory("test");
+
     string dirname = this_dir.filename().string();
     string username;
 
     // README.md
     {
-        std::ofstream f("README.md");
+        file f("README.md");
         puts("What is your GitHub username?\n"
              "(no response will not create your README with a "
              "Travis-Ci sticker)");
+        fflush(stdout);
         getline(cin, username);
-        f << "# " << dirname;
+        fprintf(f, "# %s", dirname.c_str());
         if (!username.empty()) {
-            f << " [![Build Status](https://travis-ci.org/"
-              << username << "/" << dirname
-              << ".svg?branch=master)](https://travis-ci.org/"
-              << username << "/" << dirname << ")";
+            fprintf(f, " [![Build Status](https://travis-ci.org/%s/%s"
+                       ".svg?branch=master)](https://travis-ci.org/"
+                       "%s/%s)",
+                    username.c_str(), dirname.c_str(),
+                    username.c_str(), dirname.c_str());
         }
-        f << endl;
+        fputc('\n', f);
     }
 
     // Mozilla Public License
     {
-        std::ofstream f("LICENSE");
-        f << R"(Mozilla Public License Version 2.0
+        file f("LICENSE");
+        fputs(R"(Mozilla Public License Version 2.0
 ==================================
 
 1. Definitions
@@ -423,13 +441,13 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
 
   This Source Code Form is "Incompatible With Secondary Licenses", as
   defined by the Mozilla Public License, v. 2.0.
-)";
+)", f);
     }
 
     // .travis.yml
     if (!username.empty()) {
-        std::ofstream f(".travis.yml");
-        f << R"(language: cpp
+        file f(".travis.yml");
+        fprintf(f, R"(language: cpp
 
 sudo: false
 
@@ -446,17 +464,29 @@ before_script:
   - cd vick
   - mkdir -p plugins
   - cd plugins
-  - git clone https://github.com/)" << username << '/' << dirname << R"(
+  - git clone https://github.com/%s/%s.git
   - cd ..
 
 script:
   - ./testing.sh
-)";
+)", username.c_str(), dirname.c_str());
     }
+
+    string mpl = "/* This Source Code Form is subject to the terms "
+                 "of the Mozilla Public\n * License, v. 2.0. If a "
+                 "copy of the MPL was not distributed with this\n * "
+                 "file, You can obtain one at "
+                 "http://mozilla.org/MPL/2.0/. */";
+
+    string ns = dirname;
+    if (strncmp(ns.c_str(), "vick-", 5) == 0) {
+        ns.erase(0, 5);
+    }
+    replace(ns.begin(), ns.end(), '-', '_');
 
     // lib.hh
     {
-        std::ofstream f("lib.hh");
+        file f("lib.hh");
         string all_caps = dirname;
         for (auto& c : all_caps) {
             if (c == '-') {
@@ -466,16 +496,47 @@ script:
             }
         }
         all_caps = "HEADER_GUARD_" + all_caps + "_H";
-        f << R"(/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/. */)" "\n" << endl
-          << "#ifndef " << all_caps << endl
-          << "#define " << all_caps << endl
-          << '\n'
-          << "/*!\n * \\file " << dirname
-          << "/lib.hh\n * \\brief\n */" << endl
-          << '\n'
-          << "#endif" << endl;
+        fprintf(f, R"(%s
+
+#ifndef %s
+#define %s
+
+namespace vick {
+namespace %s {
+
+/*!
+ * \file %s/lib.hh
+ * \brief
+ */
+
+}
+}
+
+#endif
+)",
+                mpl.c_str(), all_caps.c_str(), all_caps.c_str(),
+                ns.c_str(), dirname.c_str());
+    }
+
+    // src/<plugin name>.cc
+    {
+        path p = "src";
+        create_directory(p);
+        // now make p represent the source file
+        p /= ns;
+        p += ".cc";
+
+        file f(p.c_str());
+        fprintf(f, R"(%s
+
+#include "../lib.hh"
+
+namespace vick {
+namespace %s {
+}
+}
+)",
+                mpl.c_str(), ns.c_str());
     }
 
     // .gitignore
@@ -486,7 +547,4 @@ out
 testout
 )";
     }
-
-    create_directory("src");
-    create_directory("test");
 }
